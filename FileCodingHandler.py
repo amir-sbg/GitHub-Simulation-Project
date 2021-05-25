@@ -5,11 +5,11 @@ def encoder(type, path):
     outputContent = ""
 
     if "f" in type:
-        outputContent = outputContent + "f\n" + path + "\n" + decoder(path) + "\nfinish"
+        outputContent = outputContent + "f\n" + path + "\n" + fileEncoder(path) + "\nfinish"
 
     elif "d" in type:
         outputContent = outputContent + "d"
-        outputContent = outputContent + directoryDecoder(path) + "\nfinish"
+        outputContent = outputContent + directoryEncoder(path) + "\nfinish"
 
     return outputContent
 
@@ -20,13 +20,13 @@ def directoryEncoder(path):
         if os.path.isfile(path + "/" + fileName):
             tmpPath = path + "/" + fileName
             #todo : use decoder() as an internal peace of code ,not an external func
-            outputContent = outputContent + "\n" + tmpPath + "\n" + decoder(tmpPath)
+            outputContent = outputContent + "\n" + tmpPath + "\n" + fileEncoder(tmpPath)
         else:
-            outputContent = outputContent + directoryDecoder(path + "/" + fileName)
+            outputContent = outputContent + directoryEncoder(path + "/" + fileName)
     return str(outputContent)
 
 
-def encoder(path):
+def fileEncoder(path):
     outputContent = ""
     blockSize = os.path.getsize(path)
     with open(path, "rb") as sourceFile:
@@ -75,5 +75,5 @@ def decoder(messageBody, basePath):
             f.close()
 
 
-fileEncoder(fileDecoder("d", "dir"), "tmp")
+decoder(encoder("d", "dir"), "tmp")
 
