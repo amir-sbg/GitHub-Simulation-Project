@@ -25,6 +25,9 @@ class User:
     def add_repository(self, repository_name):
         self.__repositories[repository_name] = set().add(self.__username)
 
+    def get_repositories(self):
+        return self.__repositories
+
 
 def authenticate_user(username, password):
     users = load_users()

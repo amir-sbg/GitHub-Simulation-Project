@@ -1,6 +1,9 @@
 import socket
-# from _thread import *
 import threading
+from copy import deepcopy
+
+import file_system
+from file_system import *
 
 HOST = "127.0.0.1"
 PORT = 8000
@@ -59,13 +62,24 @@ class ClientThread(threading.Thread):
         print("connection established with: ", address)
 
     def run(self):
+        user = None
         while True:
             data = self.connection.recv(2048)
             data = data.decode()
             if not data:
                 break
             print("from client at {}: {}".format(self.address[1], data))
-            self.connection.sendall(bytes(data, 'UTF-8'))
+            answer = parseReceivedMessage(data, user)
+
+            if str(type(answer)) == "<class 'file_system.User'>":
+                user = deepcopy(answer)
+
+            if answer is None:
+                answer = "1"
+            else:
+                answer = "0"
+
+            self.connection.sendall(bytes(answer, 'UTF-8'))
 
         self.connection.close()
         print("client at ", self.address, " disconnected.")
@@ -73,7 +87,6 @@ class ClientThread(threading.Thread):
 
 def server():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        # s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind((HOST, PORT))
         print("Server is on!")
         while True:
@@ -81,6 +94,26 @@ def server():
             connection, address = s.accept()
             new_thread = ClientThread(address, connection)
             new_thread.start()
+
+
+def parseReceivedMessage(command, user):
+    parts = command.split("$")
+    action = parts[0]
+    print("action: ", action)
+    if action == '1' and user is None:
+        allocate_new_user(parts[1], parts[2])
+        user = authenticate_user(parts[1], parts[2])
+        return user
+
+    if action == '2' and user is None:
+        user = authenticate_user(parts[1], parts[2])
+        return user
+
+    if action == '3' and user is not None:
+        create_repository_for_user(user.get_username(), user.get_password(), parts[1])
+        if user is not None:
+            return "0"
+        return "1"
 
 
 if __name__ == '__main__':

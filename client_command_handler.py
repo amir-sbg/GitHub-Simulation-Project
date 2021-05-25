@@ -30,12 +30,17 @@ def parseInput(command):
         messageToSend = messageToSend + name + "$"
         messageToSend = messageToSend + password + "$"
 
-    if command.startswith("list"):
+    if command.startswith("makedir"):
+        parts = command.split()
         messageToSend = messageToSend + "3$"
+        messageToSend = messageToSend + parts[1] + "$"
+
+    if command.startswith("list"):
+        messageToSend = messageToSend + "4$"
 
     if command.startswith("choose"):
         parts = command.split()
-        messageToSend = messageToSend + "4$"
+        messageToSend = messageToSend + "5$"
         messageToSend = messageToSend + parts[1] + "$"
 
     if command.startswith("push"):
@@ -44,23 +49,15 @@ def parseInput(command):
         # TODO: uncomment next line and delete the line after that
         # data = amirFunction(parts[-2], parts[-1])
         data = "101010101011111100000011111111110"
-        messageToSend = messageToSend + "5$"
+        messageToSend = messageToSend + "6$"
         messageToSend = messageToSend + commitMessage + "$"
         messageToSend = messageToSend + data + "$"
 
     if command.startswith("pull"):
         parts = command.split()
-        messageToSend = messageToSend + "6$"
+        messageToSend = messageToSend + "7$"
         messageToSend = messageToSend + parts[-1] + "$"
 
     return messageToSend
 
 
-def main():
-    while True:
-        inStr = input()
-        parseInput(inStr)
-
-
-if __name__ == "__main__":
-    main()

@@ -1,5 +1,6 @@
 import socket
 import sys
+from client_command_handler import parseInput
 
 HOST = "127.0.0.1"
 PORT = 8000
@@ -15,7 +16,10 @@ def client():
         s.connect((HOST, PORT))
         while True:
             message = input()
-            s.sendall(message.encode('ascii'))
+            toSendMessage = parseInput(message)
+            if toSendMessage == "":
+                continue
+            s.sendall(toSendMessage.encode('ascii'))
             data = s.recv(1024)
             print('Received from the server :', str(data.decode('ascii')))
             if message == 'stop':
