@@ -60,23 +60,25 @@ class ClientThread(threading.Thread):
         print("connection established with: ", address)
 
     def run(self):
-        user = None
+        username = password = None
         while True:
             data = self.connection.recv(2048)
             data = data.decode()
             if not data:
                 break
             print("from client at {}: {}".format(self.address[1], data))
-            if user is not None:
-                answer = parseReceivedMessage(data, authenticate_user(user.get_username(), user.get_password()))
+            if username is not None:
+                answer = parseReceivedMessage(data, authenticate_user(username, password))
             else:
                 answer = parseReceivedMessage(data, None)
 
-            if str(type(answer)) == "<class 'file_system.User'>":
-                user = deepcopy(answer)
+            if type(answer) == list:
+                username = deepcopy(answer[0])
+                password = deepcopy(answer[1])
                 answer = "User logged in"
+
             if answer is None:
-                answer = "1"
+                answer = "ERROR!"
 
             self.connection.sendall(bytes(answer, 'UTF-8'))
 
@@ -102,21 +104,29 @@ def parseReceivedMessage(command, user):
     if action == '1' and user is None:
         allocate_new_user(parts[1], parts[2])
         user = authenticate_user(parts[1], parts[2])
-        return user
+        return "User created"
 
     if action == '2' and user is None:
         user = authenticate_user(parts[1], parts[2])
-        return user
+        return [user.get_username(), user.get_password()]
 
     if action == '3' and user is not None:
         create_repository_for_user(user.get_username(), user.get_password(), parts[1])
-        return "0"
+        return "done"
 
     if action == '4' and user is not None:
         repositories = user.get_repositories()
         answer = ""
         for x in repositories:
             answer = answer + str(x) + "\n"
+        return answer
+
+    if action == '4' and user is not None:
+        repositories = user.get_repositories()
+        answer = ""
+        for x in repositories:
+            answer = answer + str(x) + "\n"
+        answer = answer[0: len(answer - 1)]
         return answer
 
 

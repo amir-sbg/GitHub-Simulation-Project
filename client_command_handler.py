@@ -30,7 +30,7 @@ def parseInput(command):
         messageToSend = messageToSend + name + "$"
         messageToSend = messageToSend + password + "$"
 
-    if command.startswith("makedir"):
+    if command.startswith("mkdir"):
         parts = command.split()
         messageToSend = messageToSend + "3$"
         messageToSend = messageToSend + parts[1] + "$"
