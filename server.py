@@ -60,7 +60,7 @@ class ClientThread(threading.Thread):
         print("connection established with: ", address)
 
     def run(self):
-        username = password = None
+        username = password = current_repository = None
         while True:
             data = self.connection.recv(2048)
             data = data.decode()
@@ -68,14 +68,17 @@ class ClientThread(threading.Thread):
                 break
             print("from client at {}: {}".format(self.address[1], data))
             if username is not None:
-                answer = parseReceivedMessage(data, authenticate_user(username, password))
+                answer = parseReceivedMessage(data, authenticate_user(username, password), current_repository)
             else:
-                answer = parseReceivedMessage(data, None)
+                answer = parseReceivedMessage(data, None, current_repository)
 
-            if type(answer) == list:
+            if type(answer) == list and len(answer) == 2:
                 username = deepcopy(answer[0])
                 password = deepcopy(answer[1])
                 answer = "User logged in"
+            if type(answer) == list and len(answer) == 1:
+                current_repository = answer[0]
+                answer = "Repository selected :)"
 
             if answer is None:
                 answer = "ERROR!"
@@ -97,7 +100,7 @@ def server():
             new_thread.start()
 
 
-def parseReceivedMessage(command, user):
+def parseReceivedMessage(command, user, current_repository):
     parts = command.split("$")
     action = parts[0]
     print("action: ", action)
@@ -118,16 +121,23 @@ def parseReceivedMessage(command, user):
         repositories = user.get_repositories()
         answer = ""
         for x in repositories:
-            answer = answer + str(x) + "\n"
+            answer = answer + "\n" + str(x)
         return answer
 
-    if action == '4' and user is not None:
+    if action == '5' and user is not None:
+        if current_repository is not None:
+            return "Your are currently in a repository!!!"
+        repository_name = parts[1]
+        print(repository_name)
         repositories = user.get_repositories()
-        answer = ""
+        exist = False
         for x in repositories:
-            answer = answer + str(x) + "\n"
-        answer = answer[0: len(answer - 1)]
-        return answer
+            if str(x) == str(repository_name):
+                exist = True
+                break
+        if not exist:
+            return None
+        return [repository_name]
 
 
 if __name__ == '__main__':

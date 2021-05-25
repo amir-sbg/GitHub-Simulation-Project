@@ -18,10 +18,11 @@ def client():
             message = input()
             toSendMessage = parseInput(message)
             if toSendMessage == "":
+                print("Invalid input!!!")
                 continue
             s.sendall(toSendMessage.encode('ascii'))
             data = s.recv(1024)
-            print('Received from the server :', str(data.decode('ascii')))
+            print('Received from the server:', str(data.decode('ascii')))
             if message == 'stop':
                 break
 
