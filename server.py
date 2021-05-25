@@ -1,8 +1,6 @@
 import socket
 import threading
 from copy import deepcopy
-
-import file_system
 from file_system import *
 
 HOST = "127.0.0.1"
@@ -69,15 +67,16 @@ class ClientThread(threading.Thread):
             if not data:
                 break
             print("from client at {}: {}".format(self.address[1], data))
-            answer = parseReceivedMessage(data, user)
+            if user is not None:
+                answer = parseReceivedMessage(data, authenticate_user(user.get_username(), user.get_password()))
+            else:
+                answer = parseReceivedMessage(data, None)
 
             if str(type(answer)) == "<class 'file_system.User'>":
                 user = deepcopy(answer)
-
+                answer = "User logged in"
             if answer is None:
                 answer = "1"
-            else:
-                answer = "0"
 
             self.connection.sendall(bytes(answer, 'UTF-8'))
 
@@ -111,9 +110,14 @@ def parseReceivedMessage(command, user):
 
     if action == '3' and user is not None:
         create_repository_for_user(user.get_username(), user.get_password(), parts[1])
-        if user is not None:
-            return "0"
-        return "1"
+        return "0"
+
+    if action == '4' and user is not None:
+        repositories = user.get_repositories()
+        answer = ""
+        for x in repositories:
+            answer = answer + str(x) + "\n"
+        return answer
 
 
 if __name__ == '__main__':
