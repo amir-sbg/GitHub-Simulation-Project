@@ -1,7 +1,7 @@
 import os
 
 
-def fileDecoder(type, path):
+def encoder(type, path):
     outputContent = ""
 
     if "f" in type:
@@ -14,18 +14,19 @@ def fileDecoder(type, path):
     return outputContent
 
 
-def directoryDecoder(path):
+def directoryEncoder(path):
     outputContent = ""
     for fileName in os.listdir(path):
         if os.path.isfile(path + "/" + fileName):
             tmpPath = path + "/" + fileName
+            #todo : use decoder() as an internal peace of code ,not an external func
             outputContent = outputContent + "\n" + tmpPath + "\n" + decoder(tmpPath)
         else:
             outputContent = outputContent + directoryDecoder(path + "/" + fileName)
     return str(outputContent)
 
 
-def decoder(path):
+def encoder(path):
     outputContent = ""
     blockSize = os.path.getsize(path)
     with open(path, "rb") as sourceFile:
@@ -34,10 +35,10 @@ def decoder(path):
             if not contents:
                 break
             outputContent = outputContent + str(contents)
-    return str(outputContent)
+    return outputContent
 
 
-def fileEncoder(messageBody, basePath):
+def decoder(messageBody, basePath):
     bodyList = str(messageBody).split("\n")
     print(bodyList)
     recievedFiles = {}
@@ -56,22 +57,22 @@ def fileEncoder(messageBody, basePath):
         print(basePath + "/" + "/".join(key.split('/')[0:-1]))
         try:
             os.makedirs(basePath + "/" + "/".join(key.split('/')[0:-1]))
-            print("Exist")
-            print("path   :  ", basePath + "/" + key)
-            print("in  :  ", recievedFiles[key])
+            # print("Exist")
+            # print("path   :  ", basePath + "/" + key)
+            # print("in  :  ", recievedFiles[key])
+            # print(type(recievedFiles[key]))
             f = open(basePath + "/" + key, "wb")
-            f.write(bytes(recievedFiles[key]))
+            f.write(recievedFiles[key].encode("utf-8"))
             f.close()
         except FileExistsError:
-            print("NotExist")
-            print("path   :  ", basePath + "/" + key)
-            print("in  :  ", recievedFiles[key])
+            # print("NotExist")
+            # print("path   :  ", basePath + "/" + key)
+            # print("in  :  ", recievedFiles[key])
+            # print(type(recievedFiles[key].encode("utf-8")))
             f = open(basePath + "/" + key, "wb")
-            f.write(bytes(recievedFiles[key]))
+
+            f.write(recievedFiles[key].encode("utf-8"))
             f.close()
-
-
-
 
 
 fileEncoder(fileDecoder("d", "dir"), "tmp")
