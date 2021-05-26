@@ -1,4 +1,8 @@
 import os
+from base64 import b64decode, b64encode
+import zlib
+
+
 
 
 def encoder(type, path):
@@ -14,66 +18,77 @@ def encoder(type, path):
     return outputContent
 
 
+
+
 def directoryEncoder(path):
     outputContent = ""
     for fileName in os.listdir(path):
         if os.path.isfile(path + "/" + fileName):
             tmpPath = path + "/" + fileName
-            #todo : use decoder() as an internal peace of code ,not an external func
             outputContent = outputContent + "\n" + tmpPath + "\n" + fileEncoder(tmpPath)
         else:
             outputContent = outputContent + directoryEncoder(path + "/" + fileName)
     return str(outputContent)
 
 
+
+
 def fileEncoder(path):
-    outputContent = ""
-    blockSize = os.path.getsize(path)
-    with open(path, "rb") as sourceFile:
-        while True:
-            contents = sourceFile.read(blockSize)
-            if not contents:
-                break
-            outputContent = outputContent + str(contents)
-    return outputContent
+
+    with open(path, 'rb') as inputFile:
+        rawData = inputFile.read()
+        encodedData = b64encode(rawData)
+        compressedData = zlib.compress(encodedData, 9)
+        rawDataString = ""
+
+        for i in compressedData:
+            rawDataString = rawDataString + str(i) + " "
+        rawDataString = rawDataString[0:len(rawDataString) - 1]
+        return rawDataString
+
+
 
 
 def decoder(messageBody, basePath):
     bodyList = str(messageBody).split("\n")
     print(bodyList)
     recievedFiles = {}
+
     if "f" in bodyList[0]:
         recievedFiles[bodyList[1]] = bodyList[2]
-
     elif "d" in bodyList[0]:
         counter = 1
         while True:
             if "finish" in bodyList[counter]:
                 break
             recievedFiles[bodyList[counter]] = bodyList[counter + 1]
-
             counter += 2
+
     for key in recievedFiles.keys():
         print(basePath + "/" + "/".join(key.split('/')[0:-1]))
         try:
             os.makedirs(basePath + "/" + "/".join(key.split('/')[0:-1]))
-            # print("Exist")
-            # print("path   :  ", basePath + "/" + key)
-            # print("in  :  ", recievedFiles[key])
-            # print(type(recievedFiles[key]))
-            f = open(basePath + "/" + key, "wb")
-            f.write(recievedFiles[key].encode("utf-8"))
-            f.close()
+
+            rawDataString = recievedFiles[key].split(" ")
+            for i in range(len(rawDataString)):
+                rawDataString[i] = int(rawDataString[i])
+            compressedData = bytes(rawDataString)
+            uncompressedData = zlib.decompress(compressedData)
+            decodedData = b64decode(uncompressedData)
+            with open(basePath + "/" + key, 'wb') as outputFile:
+                outputFile.write(decodedData)
+
         except FileExistsError:
-            # print("NotExist")
-            # print("path   :  ", basePath + "/" + key)
-            # print("in  :  ", recievedFiles[key])
-            # print(type(recievedFiles[key].encode("utf-8")))
-            f = open(basePath + "/" + key, "wb")
 
-            f.write(recievedFiles[key].encode("utf-8"))
-            f.close()
+            rawDataString = recievedFiles[key].split(" ")
+            for i in range(len(rawDataString)):
+                rawDataString[i] = int(rawDataString[i])
 
+            compressedData = bytes(rawDataString)
+            uncompressedData = zlib.decompress(compressedData)
+            decodedData = b64decode(uncompressedData)
 
-decoder(encoder("d", "dir"), "tmp")
+            with open(basePath + "/" + key, 'wb') as outputFile:
+                outputFile.write(decodedData)
 
+# decoder(encoder("d", "Local_Dir"), "Repository_Dir")
