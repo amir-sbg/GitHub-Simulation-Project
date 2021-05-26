@@ -89,6 +89,7 @@ class ClientThread(threading.Thread):
             if answer is None:
                 answer = "ERROR!"
 
+            self.connection.sendall(str(len(answer.encode('utf-8'))).encode('ascii'))
             self.connection.sendall(bytes(answer, 'UTF-8'))
 
         self.connection.close()
@@ -148,7 +149,10 @@ def parseReceivedMessage(command, user, current_repository):
 
     if action == '6' and user is not None:
         push_server_side(user.get_username(), user.get_password(), parts[2], current_repository)
+        return "Pushed successfully"
 
+    if action == '7' and user is not None:
+        pass
 
 if __name__ == '__main__':
     server()
