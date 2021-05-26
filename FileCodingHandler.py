@@ -108,5 +108,5 @@ def decoder(messageBody, basePath):
 
 
 
-messageBody=encoder("f", "Local_Dir/dir2/dir2Tst.txt")
+messageBody=encoder("d", "Local_Dir")
 decoder(messageBody, "Repository_Dir")
