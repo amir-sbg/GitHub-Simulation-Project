@@ -1,4 +1,5 @@
 import math
+import os
 import socket
 import sys
 from client_command_handler import parseInput
@@ -48,4 +49,6 @@ def client():
 
 
 if __name__ == '__main__':
+    local_dir = input("Enter you Local directory: ")
+    os.chdir(local_dir)
     client()
