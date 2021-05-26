@@ -106,5 +106,7 @@ def decoder(messageBody, basePath):
                 outputFile.write(decodedData)
 
 
+
+
 messageBody=encoder("f", "Local_Dir/dir2/dir2Tst.txt")
 decoder(messageBody, "Repository_Dir")
