@@ -100,8 +100,8 @@ def push_server_side(username, password, messageBody, path):
     user = authenticate_user(username, password)
     if user is None:
         return None
-    path = os.path.join('./data', user.get_username(), path)
-    FileCodingHandler.decoder(messageBody, path)
+    pathT = "data/" + user.get_username() + "/" + path
+    FileCodingHandler.decoder(messageBody, pathT)
 
 
 def pull_client_side(path, type_):

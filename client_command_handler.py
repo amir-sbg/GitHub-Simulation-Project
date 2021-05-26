@@ -1,3 +1,6 @@
+from file_system import pull_client_side
+
+
 def printHelp():
     helpStr = "-help:  To show the help list\n\n"
     helpStr = helpStr + "push:   push –m “commit message” –f “./dir/file”"
@@ -46,9 +49,7 @@ def parseInput(command):
     if command.startswith("push"):
         parts = command.split()
         commitMessage = command.split("\"")[1]
-        # TODO: uncomment next line and delete the line after that
-        # data = amirFunction(parts[-2], parts[-1])
-        data = "101010101011111100000011111111110"
+        data = pull_client_side(parts[-1][1:-1], parts[-2][1])
         messageToSend = messageToSend + "6$"
         messageToSend = messageToSend + commitMessage + "$"
         messageToSend = messageToSend + data + "$"

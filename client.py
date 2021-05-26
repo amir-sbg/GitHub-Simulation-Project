@@ -20,6 +20,7 @@ def client():
             if toSendMessage == "":
                 print("Invalid input!!!")
                 continue
+            s.sendall(str(len(toSendMessage.encode('utf-8'))).encode('ascii'))
             s.sendall(toSendMessage.encode('ascii'))
             data = s.recv(1024)
             print('Received from the server:', str(data.decode('ascii')))
