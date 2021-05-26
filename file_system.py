@@ -102,6 +102,7 @@ def push_server_side(username, password, messageBody, path):
     if user is None:
         return None
     pathT = "data/" + user.get_username() + "/" + path
+    print(pathT)
     FileCodingHandler.decoder(messageBody, pathT)
 
 

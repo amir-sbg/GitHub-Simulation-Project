@@ -13,7 +13,7 @@ def parseInput(command):
     command = str(command)
     if command.startswith("-help"):
         printHelp()
-        return
+        return ""
 
     if command.startswith("signup"):
         name = input("Enter your name: ")

@@ -56,7 +56,7 @@ def fileEncoder(path):
 
 def decoder(messageBody, basePath):
     bodyList = str(messageBody).split("\n")
-    # print(bodyList)
+    print("base: ", basePath)
     recievedFiles = {}
 
     if "f" in bodyList[0]:
