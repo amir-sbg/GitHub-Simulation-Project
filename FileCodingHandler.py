@@ -1,19 +1,24 @@
 import os
-import zlib
 from base64 import b64decode, b64encode
+import zlib
 
 
-def encoder(_type, path):
+
+
+def encoder(type, path , boundary):
+    # outputPath=path[len(boundary):]
     outputContent = ""
 
-    if "f" in _type:
+    if "f" in type:
         outputContent = outputContent + "f\n" + path + "\n" + fileEncoder(path) + "\nfinish"
 
-    elif "d" in _type:
+    elif "d" in type:
         outputContent = outputContent + "d"
         outputContent = outputContent + directoryEncoder(path) + "\nfinish"
 
     return outputContent
+
+
 
 
 def directoryEncoder(path):
@@ -25,6 +30,8 @@ def directoryEncoder(path):
         else:
             outputContent = outputContent + directoryEncoder(path + "/" + fileName)
     return str(outputContent)
+
+
 
 
 def fileEncoder(path):
@@ -54,9 +61,12 @@ def fileEncoder(path):
             return rawDataString
 
 
+
+
+
 def decoder(messageBody, basePath):
     bodyList = str(messageBody).split("\n")
-    print("base: ", basePath)
+    # print(bodyList)
     recievedFiles = {}
 
     if "f" in bodyList[0]:
@@ -95,6 +105,9 @@ def decoder(messageBody, basePath):
 
             with open(basePath + "/" + key, 'wb') as outputFile:
                 outputFile.write(decodedData)
+
+
+
 
 # messageBody=encoder("d", "Local_Dir")
 # decoder(messageBody, "Repository_Dir")
