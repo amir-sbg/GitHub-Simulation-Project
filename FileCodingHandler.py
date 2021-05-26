@@ -65,7 +65,7 @@ def fileEncoder(path):
 
 def decoder(messageBody, basePath):
     bodyList = str(messageBody).split("\n")
-    print(bodyList)
+    # print(bodyList)
     recievedFiles = {}
 
     if "f" in bodyList[0]:
@@ -79,7 +79,7 @@ def decoder(messageBody, basePath):
             counter += 2
 
     for key in recievedFiles.keys():
-        print(basePath + "/" + "/".join(key.split('/')[0:-1]))
+        # print(basePath + "/" + "/".join(key.split('/')[0:-1]))
         try:
             os.makedirs(basePath + "/" + "/".join(key.split('/')[0:-1]))
 
