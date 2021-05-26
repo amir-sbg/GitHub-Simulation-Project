@@ -34,17 +34,31 @@ def directoryEncoder(path):
 
 
 def fileEncoder(path):
+    try:
+        os.makedirs("/".join(path.split('/')[0:-1]))
 
-    with open(path, 'rb') as inputFile:
-        rawData = inputFile.read()
-        encodedData = b64encode(rawData)
-        compressedData = zlib.compress(encodedData, 9)
-        rawDataString = ""
+        with open(path, 'rb') as inputFile:
+            rawData = inputFile.read()
+            encodedData = b64encode(rawData)
+            compressedData = zlib.compress(encodedData, 9)
+            rawDataString = ""
 
-        for i in compressedData:
-            rawDataString = rawDataString + str(i) + " "
-        rawDataString = rawDataString[0:len(rawDataString) - 1]
-        return rawDataString
+            for i in compressedData:
+                rawDataString = rawDataString + str(i) + " "
+            rawDataString = rawDataString[0:len(rawDataString) - 1]
+            return rawDataString
+    except FileExistsError:
+        with open(path, 'rb') as inputFile:
+            rawData = inputFile.read()
+            encodedData = b64encode(rawData)
+            compressedData = zlib.compress(encodedData, 9)
+            rawDataString = ""
+
+            for i in compressedData:
+                rawDataString = rawDataString + str(i) + " "
+            rawDataString = rawDataString[0:len(rawDataString) - 1]
+            return rawDataString
+
 
 
 
@@ -91,4 +105,6 @@ def decoder(messageBody, basePath):
             with open(basePath + "/" + key, 'wb') as outputFile:
                 outputFile.write(decodedData)
 
-# decoder(encoder("d", "Local_Dir"), "Repository_Dir")
+
+messageBody=encoder("f", "Local_Dir/dir2/dir2Tst.txt")
+decoder(messageBody, "Repository_Dir")
