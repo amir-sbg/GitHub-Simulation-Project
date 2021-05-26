@@ -2,6 +2,7 @@ import math
 import socket
 import sys
 from client_command_handler import parseInput
+from file_system import push_client_side
 
 HOST = "127.0.0.1"
 PORT = 8000
@@ -32,7 +33,11 @@ def client():
                 temp = temp.decode()
                 string_data = string_data + str(temp)
 
-            print('Received from the server:', string_data)
+            if string_data.startswith("pull_request"):
+                string_data = string_data[12:]
+                push_client_side(string_data, "../dns")
+            else:
+                print('Received from the server:', string_data)
             if message == 'stop':
                 break
 

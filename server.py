@@ -148,11 +148,17 @@ def parseReceivedMessage(command, user, current_repository):
         return [repository_name]
 
     if action == '6' and user is not None:
+        if current_repository is None:
+            return "First choose a repository"
         push_server_side(user.get_username(), user.get_password(), parts[2], current_repository)
         return "Pushed successfully"
 
     if action == '7' and user is not None:
-        pass
+        if current_repository is None:
+            return "First choose a repository"
+        body = pull_server_side(user.get_username(), user.get_password(), current_repository, parts[2], parts[1])
+        return "pull_request" + str(body)
+
 
 if __name__ == '__main__':
     server()

@@ -88,11 +88,12 @@ def allocate_new_user(username, password):
     return True
 
 
-def pull_server_side(username, password, path, type_):
+def pull_server_side(username, password, repository, path, type_):
     user = authenticate_user(username, password)
     if user is None:
         return None
-    pathT = "data/" + user.get_username() + "/" + path
+    pathT = "data/" + user.get_username() + "/" + repository + "/" + path
+    print(pathT)
     return FileCodingHandler.encoder(type_, pathT)
 
 

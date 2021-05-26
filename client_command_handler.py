@@ -57,7 +57,8 @@ def parseInput(command):
     if command.startswith("pull"):
         parts = command.split()
         messageToSend = messageToSend + "7$"
-        messageToSend = messageToSend + parts[-1] + "$"
+        messageToSend = messageToSend + parts[-2][1] + "$"
+        messageToSend = messageToSend + parts[2][1:-1] + "$"
 
     return messageToSend
 
