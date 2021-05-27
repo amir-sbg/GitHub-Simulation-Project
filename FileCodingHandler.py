@@ -1,6 +1,7 @@
 import os
 import zlib
 from base64 import b64decode, b64encode
+from datetime import datetime
 
 
 def encoder(_type, path):
@@ -53,7 +54,7 @@ def fileEncoder(path):
             return rawDataString
 
 
-def decoder(messageBody, basePath):
+def decoder(messageBody, basePath, commit_message):
     bodyList = str(messageBody).split("\n")
     recievedFiles = {}
 
@@ -93,6 +94,13 @@ def decoder(messageBody, basePath):
 
             with open(basePath + "/" + key, 'wb') as outputFile:
                 outputFile.write(decodedData)
+
+    try:
+        with open(basePath + "/" + "commits.txt", "a") as o:
+            o.write("{}|{}\n".format(commit_message, datetime.now()))
+    except FileExistsError:
+        print("Commit file not found!")
+
 
 # messageBody=encoder("d", "Local_Dir")
 # decoder(messageBody, "Repository_Dir")

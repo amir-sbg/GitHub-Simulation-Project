@@ -37,7 +37,7 @@ def client():
             if string_data.startswith("pull_request"):
                 string_data = string_data[12:]
                 print("here")
-                push_client_side(string_data, "C:/Users/ffara/Desktop/C/dns")
+                push_client_side(string_data, "C:/Users/Amin/Desktop/C/dns")
                 print("after")
             else:
                 print('Received from the server:', string_data)

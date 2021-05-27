@@ -60,6 +60,9 @@ def parseInput(command):
         messageToSend = messageToSend + parts[-2][1] + "$"
         messageToSend = messageToSend + parts[2][1:-1] + "$"
 
+    if command.startswith("view"):
+        messageToSend = "8$"
+
     return messageToSend
 
 

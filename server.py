@@ -156,9 +156,17 @@ def parseReceivedMessage(command, user, current_repository):
     if action == '7' and user is not None:
         if current_repository is None:
             return "First choose a repository"
-
         body = pull_server_side(user.get_username(), user.get_password(), current_repository, parts[2], parts[1])
         return "pull_request" + str(body)
+
+    if action == '8' and user is not None:
+        if current_repository is None:
+            return "First choose a repository"
+        try:
+            with open("data/" + user.get_username() + "/" + current_repository + "/commits.txt", "r") as o:
+                return o.read()
+        except FileExistsError:
+            print("Commit file not found!")
 
 
 if __name__ == '__main__':

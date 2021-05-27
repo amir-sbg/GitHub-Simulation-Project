@@ -108,7 +108,7 @@ def push_server_side(username, password, messageBody, repository, commit_message
         return None
     pathT = "data/" + user.get_username() + "/" + repository
     print(pathT)
-    FileCodingHandler.decoder(messageBody, pathT)
+    FileCodingHandler.decoder(messageBody, pathT, commit_message)
 
 
 def pull_client_side(path, type_):
