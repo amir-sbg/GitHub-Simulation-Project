@@ -102,7 +102,7 @@ def pull_server_side(username, password, repository, path, type_):
     return ans
 
 
-def push_server_side(username, password, messageBody, repository):
+def push_server_side(username, password, messageBody, repository, commit_message):
     user = authenticate_user(username, password)
     if user is None:
         return None

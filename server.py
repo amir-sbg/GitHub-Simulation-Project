@@ -150,7 +150,7 @@ def parseReceivedMessage(command, user, current_repository):
     if action == '6' and user is not None:
         if current_repository is None:
             return "First choose a repository"
-        push_server_side(user.get_username(), user.get_password(), parts[2], current_repository)
+        push_server_side(user.get_username(), user.get_password(), parts[2], current_repository, parts[1])
         return "Pushed successfully"
 
     if action == '7' and user is not None:
