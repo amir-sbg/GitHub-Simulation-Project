@@ -28,6 +28,11 @@ class User:
     def get_repositories(self):
         return self.__repositories
 
+    def add_contributor(self, user, repository):
+        if self.__repositories.__contains__(repository):
+            self.__repositories[repository].add(user)
+
+
 
 def authenticate_user(username, password):
     users = load_users()
@@ -105,10 +110,12 @@ def pull_server_side(username, password, repository, path, type_):
 def push_server_side(username, password, messageBody, repository, commit_message):
     user = authenticate_user(username, password)
     if user is None:
-        return None
+        return False
     pathT = "data/" + user.get_username() + "/" + repository
     print(pathT)
     FileCodingHandler.decoder(messageBody, pathT, commit_message)
+
+    return True
 
 
 def pull_client_side(path, type_):
@@ -119,8 +126,30 @@ def push_client_side(messageBody, path):
     FileCodingHandler.decoder(messageBody, path)
 
 
-def add_contributor():
-    pass
+def add_contributor(username, password, new_user_username, repository):
+    user = authenticate_user(username, password)
+    users = load_users()
+    if user is None:
+        return False
+
+    target_user = None
+    for user_ in users:
+        if user_.get_username() == new_user_username:
+            target_user = user_
+            break
+
+    if target_user is None:
+        return False
+
+    for user_ in users:
+        if user_ == user:
+            user_.add_contributor(target_user, repository)
+            break
+
+    save_users(users)
+
+    return True
+
 
 
 def create_repository_for_user(username, password, repository_name):
