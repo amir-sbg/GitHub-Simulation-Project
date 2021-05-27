@@ -27,13 +27,13 @@ def parseInput(command):
             print("Password doesn't match\n\n")
 
     if command.startswith("signin"):
-        name = input("Enter your name: ")
+        name = input("Enter your Username: ")
         password = input("Enter you password: ")
         messageToSend = messageToSend + "2$"
         messageToSend = messageToSend + name + "$"
         messageToSend = messageToSend + password + "$"
 
-    if command.startswith("mkdir"):
+    if command.startswith("mkrepo"):
         parts = command.split()
         messageToSend = messageToSend + "3$"
         messageToSend = messageToSend + parts[1] + "$"
