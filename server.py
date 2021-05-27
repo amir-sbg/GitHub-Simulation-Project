@@ -156,7 +156,11 @@ def parseReceivedMessage(command, user, current_repository):
     if action == '7' and user is not None:
         if current_repository is None:
             return "First choose a repository"
+
+        last = os.getcwd()
+        os.chdir("data/" + user.get_username())
         body = pull_server_side(user.get_username(), user.get_password(), current_repository, parts[2], parts[1])
+        os.chdir(last)
         return "pull_request" + str(body)
 
 

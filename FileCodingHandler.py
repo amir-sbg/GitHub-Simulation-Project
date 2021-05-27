@@ -5,11 +5,10 @@ from base64 import b64decode, b64encode
 
 def encoder(_type, path):
     outputContent = ""
-
-    if "f" in type:
+    if "f" in _type:
         outputContent = outputContent + "f\n" + path + "\n" + fileEncoder(path) + "\nfinish"
 
-    elif "d" in type:
+    elif "d" in _type:
         outputContent = outputContent + "d"
         outputContent = outputContent + directoryEncoder(path) + "\nfinish"
 
@@ -29,8 +28,8 @@ def directoryEncoder(path):
 
 def fileEncoder(path):
     try:
-        os.makedirs("/".join(path.split('/')[0:-1]))
-
+        if path.count("/") != 0:
+            os.makedirs("/".join(path.split('/')[0:-1]))
         with open(path, 'rb') as inputFile:
             rawData = inputFile.read()
             encodedData = b64encode(rawData)

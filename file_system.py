@@ -92,16 +92,16 @@ def pull_server_side(username, password, repository, path, type_):
     user = authenticate_user(username, password)
     if user is None:
         return None
-    pathT = "data/" + user.get_username() + "/" + repository + "/" + path
+    pathT = repository + "/" + path
     print(pathT)
     return FileCodingHandler.encoder(type_, pathT)
 
 
-def push_server_side(username, password, messageBody, path):
+def push_server_side(username, password, messageBody, repository):
     user = authenticate_user(username, password)
     if user is None:
         return None
-    pathT = "data/" + user.get_username() + "/" + path
+    pathT = "data/" + user.get_username() + "/" + repository
     print(pathT)
     FileCodingHandler.decoder(messageBody, pathT)
 

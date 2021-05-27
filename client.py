@@ -25,8 +25,8 @@ def client():
                 continue
             s.sendall(str(len(toSendMessage.encode('utf-8'))).encode('ascii'))
             s.sendall(toSendMessage.encode('ascii'))
-            data = s.recv(2048)
 
+            data = s.recv(2048)
             data = data.decode("ascii")
             string_data = ""
             for i in range(math.ceil(int(data) / 2048)):
@@ -36,7 +36,9 @@ def client():
 
             if string_data.startswith("pull_request"):
                 string_data = string_data[12:]
-                push_client_side(string_data, "../dns")
+                print("here")
+                push_client_side(string_data, "dns")
+                print("after")
             else:
                 print('Received from the server:', string_data)
             if message == 'stop':
