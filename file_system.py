@@ -119,6 +119,10 @@ def push_client_side(messageBody, path):
     FileCodingHandler.decoder(messageBody, path)
 
 
+def add_contributor():
+    pass
+
+
 def create_repository_for_user(username, password, repository_name):
     user = authenticate_user(username, password)
     users = load_users()
@@ -139,4 +143,3 @@ def create_repository_for_user(username, password, repository_name):
     save_users(users)
 
     return True
-
