@@ -63,6 +63,11 @@ def parseInput(command):
     if command.startswith("view"):
         messageToSend = "8$"
 
+    if command.startswith("contribute"):
+        parts = command.split()
+        messageToSend = messageToSend + "8&"
+        messageToSend = messageToSend + parts[1]
+
     return messageToSend
 
 

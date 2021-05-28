@@ -1,5 +1,6 @@
 import os
 import pickle
+
 import FileCodingHandler
 
 
@@ -31,7 +32,6 @@ class User:
     def add_contributor(self, user, repository):
         if self.__repositories.__contains__(repository):
             self.__repositories[repository].add(user)
-
 
 
 def authenticate_user(username, password):
@@ -149,7 +149,6 @@ def add_contributor(username, password, new_user_username, repository):
     save_users(users)
 
     return True
-
 
 
 def create_repository_for_user(username, password, repository_name):
