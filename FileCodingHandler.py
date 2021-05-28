@@ -28,15 +28,29 @@ def directoryEncoder(path):
 
 
 def fileEncoder(path):
+    try:
+        if path.count("/") != 0:
+            os.makedirs("/".join(path.split('/')[0:-1]))
         with open(path, 'rb') as inputFile:
             rawData = inputFile.read()
             encodedData = b64encode(rawData)
-            compressedData = zlib.compress(encodedData,1)
+            compressedData = zlib.compress(encodedData, 9)
             rawDataString = ""
+
             for i in compressedData:
                 rawDataString = rawDataString + str(i) + " "
             rawDataString = rawDataString[0:len(rawDataString) - 1]
+            return rawDataString
+    except FileExistsError:
+        with open(path, 'rb') as inputFile:
+            rawData = inputFile.read()
+            encodedData = b64encode(rawData)
+            compressedData = zlib.compress(encodedData, 9)
+            rawDataString = ""
 
+            for i in compressedData:
+                rawDataString = rawDataString + str(i) + " "
+            rawDataString = rawDataString[0:len(rawDataString) - 1]
             return rawDataString
 
 
@@ -55,6 +69,7 @@ def decoder(messageBody, basePath, commit_message=None):
             counter += 2
 
     for key in recievedFiles.keys():
+        # print(basePath + "/" + "/".join(key.split('/')[0:-1]))
         try:
             os.makedirs(basePath + "/" + "/".join(key.split('/')[0:-1]))
 
@@ -67,7 +82,8 @@ def decoder(messageBody, basePath, commit_message=None):
             with open(basePath + "/" + key, 'wb') as outputFile:
                 outputFile.write(decodedData)
 
-        except FileExistsError or IsADirectoryError :
+        except FileExistsError:
+
             rawDataString = recievedFiles[key].split(" ")
             for i in range(len(rawDataString)):
                 rawDataString[i] = int(rawDataString[i])
@@ -85,7 +101,3 @@ def decoder(messageBody, basePath, commit_message=None):
                 o.write("{}|{}\n".format(commit_message, datetime.now()))
         except FileExistsError:
             print("Commit file not found!")
-
-
-messageBody=encoder("f", "Local_Dir/dir2/dir3/4_test.txt")
-decoder(messageBody, "Repository_Dir","n")

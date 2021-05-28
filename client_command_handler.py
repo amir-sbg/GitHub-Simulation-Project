@@ -79,6 +79,14 @@ def parseInput(command):
         messageToSend = messageToSend + "12$"
         messageToSend = messageToSend + parts[1] + "$"
 
+    if command.startswith("Opull"):
+        parts = command.split()
+        messageToSend = messageToSend + "13$"
+        messageToSend = messageToSend + parts[1] + "$"
+        messageToSend = messageToSend + parts[2] + "$"
+        messageToSend = messageToSend + parts[3][1] + "$"
+        messageToSend = messageToSend + parts[4][1:-1] + "$"
+
     return messageToSend
 
 

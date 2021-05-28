@@ -113,6 +113,15 @@ def pull_server_side(username, password, repository, path, type_):
     return ans
 
 
+def Opull_server_side(username, repository, path, type_):
+    pathT = path
+    last = os.getcwd()
+    os.chdir("data/" + username + "/" + repository)
+    ans = FileCodingHandler.encoder(type_, pathT)
+    os.chdir(last)
+    return ans
+
+
 def push_server_side(username, password, messageBody, repository, commit_message):
     user = authenticate_user(username, password)
     if user is None:

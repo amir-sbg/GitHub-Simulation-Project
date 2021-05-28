@@ -198,6 +198,10 @@ def parseReceivedMessage(command, user, current_repository):
                     answer = answer + "\n" + str(x)
                 return answer
 
+    if action == '13' and user is not None:
+        body = Opull_server_side(parts[1], parts[2], parts[4], parts[3])
+        return "pull_request" + str(body)
+
 
 if __name__ == '__main__':
     server()
