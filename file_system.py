@@ -98,8 +98,15 @@ def pull_server_side(username, password, repository, path, type_):
         return None
     pathT = path
 
+    repositories = user.get_repositories()
+    answer = ""
+    for x in repositories:
+        if x == repository:
+            answer = repositories[x]
+            break
+
     last = os.getcwd()
-    os.chdir("data/" + user.get_username() + "/" + repository)
+    os.chdir("data/" + answer.get_username() + "/" + repository)
     ans = FileCodingHandler.encoder(type_, pathT)
     os.chdir(last)
 
@@ -116,7 +123,6 @@ def push_server_side(username, password, messageBody, repository, commit_message
         if x == repository:
             answer = repositories[x]
             break
-    print("Fuckkkkkkkkk: ", answer.get_username())
     pathT = "data/" + answer.get_username() + "/" + repository
     print(pathT)
     FileCodingHandler.decoder(messageBody, pathT, commit_message)
