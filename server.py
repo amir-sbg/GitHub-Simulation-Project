@@ -112,8 +112,10 @@ def parseReceivedMessage(command, user, current_repository):
     action = parts[0]
     print("action: ", action)
     if action == '1' and user is None:
-        allocate_new_user(parts[1], parts[2])
-        user = authenticate_user(parts[1], parts[2])
+        ans = allocate_new_user(parts[1], parts[2])
+        # user = authenticate_user(parts[1], parts[2])
+        if not ans:
+            return "User exists"
         return "User created"
 
     if action == '2' and user is None:
