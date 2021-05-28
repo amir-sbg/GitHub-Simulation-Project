@@ -29,11 +29,8 @@ class User:
         else:
             self.__repositories[repository_name] = owner_user
 
-
     def get_repositories(self):
         return self.__repositories
-
-
 
 
 def authenticate_user(username, password):
@@ -113,7 +110,14 @@ def push_server_side(username, password, messageBody, repository, commit_message
     user = authenticate_user(username, password)
     if user is None:
         return False
-    pathT = "data/" + user.get_username() + "/" + repository
+    repositories = user.get_repositories()
+    answer = ""
+    for x in repositories:
+        if x == repository:
+            answer = repositories[x]
+            break
+    print("Fuckkkkkkkkk: ", answer.get_username())
+    pathT = "data/" + answer.get_username() + "/" + repository
     print(pathT)
     FileCodingHandler.decoder(messageBody, pathT, commit_message)
 
@@ -140,8 +144,6 @@ def add_contributor(username, password, new_user_username, repository):
             user_.add_repository(repository, self_owner=False, owner_user=user)
             save_users(users)
             return True
-
-
 
     return False
 

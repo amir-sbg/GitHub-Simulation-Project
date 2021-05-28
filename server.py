@@ -182,6 +182,12 @@ def parseReceivedMessage(command, user, current_repository):
             ans = ans + "\n" + i.get_username()
         return ans
 
+    if action == '11' and user is not None:
+        if current_repository is None:
+            return "First choose a repository"
+        add_contributor(user.get_username(), user.get_password(), parts[1], current_repository)
+        return "Added successfully"
+
 
 if __name__ == '__main__':
     server()
