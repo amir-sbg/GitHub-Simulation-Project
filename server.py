@@ -174,6 +174,14 @@ def parseReceivedMessage(command, user, current_repository):
         body = pull_server_side(user.get_username(), user.get_password(), current_repository, "./", parts[1])
         return "pull_request" + str(body)
 
+    if action == '10':
+        users = load_users()
+        print(type(users))
+        ans = ""
+        for i in users:
+            ans = ans + "\n" + i.get_username()
+        return ans
+
 
 if __name__ == '__main__':
     server()

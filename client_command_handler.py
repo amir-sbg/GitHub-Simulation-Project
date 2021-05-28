@@ -65,7 +65,11 @@ def parseInput(command):
 
     if command.startswith("sync"):
         parts = command.split()
-        messageToSend = messageToSend + "9&"
+        messageToSend = messageToSend + "9$"
+
+    if command.startswith("userslist"):
+        parts = command.split()
+        messageToSend = messageToSend + "10$"
 
     return messageToSend
 
