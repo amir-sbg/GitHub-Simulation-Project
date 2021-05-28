@@ -74,6 +74,11 @@ def parseInput(command):
         messageToSend = messageToSend + "11$"
         messageToSend = messageToSend + parts[1] + "$"
 
+    if command.startswith("repolsof"):
+        parts = command.split()
+        messageToSend = messageToSend + "12$"
+        messageToSend = messageToSend + parts[1] + "$"
+
     return messageToSend
 
 

@@ -188,6 +188,16 @@ def parseReceivedMessage(command, user, current_repository):
         add_contributor(user.get_username(), user.get_password(), parts[1], current_repository)
         return "Added successfully"
 
+    if action == '12' and user is not None:
+        users = load_users()
+        for user_ in users:
+            if user_.get_username() == parts[1]:
+                repositories = user_.get_repositories()
+                answer = ""
+                for x in repositories:
+                    answer = answer + "\n" + str(x)
+                return answer
+
 
 if __name__ == '__main__':
     server()
