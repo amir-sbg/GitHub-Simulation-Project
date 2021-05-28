@@ -63,6 +63,17 @@ def parseInput(command):
     if command.startswith("view"):
         messageToSend = "8$"
 
+    if command.startswith("sync"):
+        messageToSend = messageToSend + "9$"
+
+    if command.startswith("userslist"):
+        messageToSend = messageToSend + "10$"
+
+    if command.startswith("cont"):
+        parts = command.split()
+        messageToSend = messageToSend + "11$"
+        messageToSend = messageToSend + parts[1] + "$"
+
     return messageToSend
 
 

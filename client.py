@@ -36,9 +36,7 @@ def client():
 
             if string_data.startswith("pull_request"):
                 string_data = string_data[12:]
-                print("here")
-                push_client_side(string_data, "C:/Users/Amin/Desktop/C/dns")
-                print("after")
+                push_client_side(string_data, "./")
             else:
                 print('Received from the server:', string_data)
             if message == 'stop':
