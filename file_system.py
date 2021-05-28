@@ -9,7 +9,7 @@ class User:
     def __init__(self, username, password):
         self.__username = username
         self.__password = password
-        self.__repositories = dict()
+        self.__repositories = dict()  # {repository_name: owner_name}
 
     def get_username(self):
         return self.__username
@@ -23,15 +23,17 @@ class User:
     def __eq__(self, other):
         return self.__username == other.get_username()
 
-    def add_repository(self, repository_name):
-        self.__repositories[repository_name] = set().add(self.__username)
+    def add_repository(self, repository_name, self_owner=True, owner_user=None):
+        if self_owner:
+            self.__repositories[repository_name] = self
+        else:
+            self.__repositories[repository_name] = owner_user
+
 
     def get_repositories(self):
         return self.__repositories
 
-    def add_contributor(self, user, repository):
-        if self.__repositories.__contains__(repository):
-            self.__repositories[repository].add(user)
+
 
 
 def authenticate_user(username, password):
@@ -49,7 +51,7 @@ def load_users():
     try:
         file = open('./data/users.raw', 'rb')
         users = pickle.load(file)
-    except IOError as er:
+    except IOError:
         users = list()
     finally:
         if file is not None:
@@ -135,20 +137,13 @@ def add_contributor(username, password, new_user_username, repository):
     target_user = None
     for user_ in users:
         if user_.get_username() == new_user_username:
-            target_user = user_
-            break
+            user_.add_repository(repository, self_owner=False, owner_user=user)
+            save_users(users)
+            return True
 
-    if target_user is None:
-        return False
 
-    for user_ in users:
-        if user_ == user:
-            user_.add_contributor(target_user, repository)
-            break
 
-    save_users(users)
-
-    return True
+    return False
 
 
 def create_repository_for_user(username, password, repository_name):
