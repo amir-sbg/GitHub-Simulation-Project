@@ -168,6 +168,12 @@ def parseReceivedMessage(command, user, current_repository):
         except FileExistsError:
             print("Commit file not found!")
 
+    if action == '9' and user is not None:
+        if current_repository is None:
+            return "First choose a repository"
+        body = pull_server_side(user.get_username(), user.get_password(), current_repository, "./", parts[1])
+        return "pull_request" + str(body)
+
 
 if __name__ == '__main__':
     server()
