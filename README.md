@@ -12,10 +12,6 @@ A Python simulation of a Git-style repository service built around a TCP client/
 
 > A Python TCP client-server simulation of Git-style workflows with push/pull, authentication, file encoding, contributors, and file-backed repository persistence.
 
-## AI status
-
-**AI status: this project does not currently implement artificial intelligence, machine learning, or an AI assistant.** Its strongest value is software engineering: networking, protocol framing, concurrent client handling, command dispatch, serialization, authentication, and persistence.
-
 ## What the project demonstrates
 
 - A TCP client and server communicating over `127.0.0.1:8000`.
@@ -190,8 +186,4 @@ The Python modules compile successfully with:
 python3 -m py_compile FileCodingHandler.py file_system.py client_command_handler.py client.py server.py
 ```
 
-The preview image is based on the actual command names, server log messages, TCP framing, encoding pipeline, and `data/` layout implemented in the repository. It is a software workflow visualization, not an AI-generated product mockup.
-
-## License
-
-No license file is currently included. Add a license before distributing or reusing the project outside its original educational context.
+The preview image is based on the actual command names, server log messages, TCP framing, encoding pipeline, and `data/` layout implemented in the repository.
